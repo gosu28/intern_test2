@@ -34,3 +34,36 @@ class ProductProduct(models.Model):
             if rec.date_from and rec.date_to:
                 if rec.date_from < rec.date_to:
                     raise ValidationError('Date Start Warranty is smaller than Date Stop Warranty.')
+
+
+class SaleOder(models.Model):
+    _inherit = 'sale.order'
+    _description = 'Sale Order Inherit'
+
+    discount_with_warranty = fields.Monetary(string='Estimated Discount Total With Product Warranty', readonly=True,
+                                             store=True, compute='discount_total_with_warranty')
+
+    @api.depends('order_line')
+    def discount_total_with_warranty(self):
+        for rec in self:
+            estimated_total = 0.0
+            for line in rec.order_line:
+                estimated_total += line.product_price
+        rec.update({
+            'discount_with_warranty': estimated_total
+        })
+
+
+class SaleOrderLineInherit(models.Model):
+    _inherit = 'sale.order.line'
+
+    product_price = fields.Monetary(string='Product Price', compute='calculate_price')
+
+    @api.onchange('price_subtotal')
+    def calculate_price(self):
+        for order in self:
+            if order.product_id:
+                if not order.product_id.product_warranty:
+                    order.product_price = order.price_subtotal * 0.9
+                else:
+                    order.product_price = order.price_subtotal
