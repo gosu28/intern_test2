@@ -8,9 +8,9 @@
             <field name="inherit_id" ref="product.product_normal_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='categ_id']" position="after">
-                    <field name="product_warranty" groups="odoo_rm_ro-016_test2.group_advanced_sale"/>
-                    <field name="date_to" groups="odoo_rm_ro-016_test2.group_advanced_sale"/>
-                    <field name="date_from" groups="odoo_rm_ro-016_test2.group_advanced_sale"/>
+                    <field name="product_warranty" groups="intern_test2.group_advanced_sale"/>
+                    <field name="date_to" groups="intern_test2.group_advanced_sale"/>
+                    <field name="date_from" groups="intern_test2.group_advanced_sale"/>
                 </xpath>
             </field>
         </record>
@@ -21,8 +21,8 @@
             <field name="inherit_id" ref="product.product_product_tree_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='name']" position="after">
-                    <field name="product_warranty" groups="odoo_rm_ro-016_test2.group_advanced_sale"/>
-                    <field name="time_interval" groups="odoo_rm_ro-016_test2.group_advanced_sale"/>
+                    <field name="product_warranty" groups="intern_test2.group_advanced_sale"/>
+                    <field name="time_interval" groups="intern_test2.group_advanced_sale"/>
                 </xpath>
             </field>
         </record>

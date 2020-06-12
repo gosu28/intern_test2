@@ -1,0 +1,15 @@
+<odoo>
+    <template id="product_warranty" inherit_id="website_sale.cart_lines">
+        <xpath expr="//table[@id='cart_products']/thead/tr/th[4]" position="before">
+            <th class="text-center td-warranty">Product Warranty Code</th>
+        </xpath>
+        <xpath expr="//table[@id='cart_products']/tbody/t/tr/td[5]" position="before">
+            <td class="text-center td-warranty" t-if="line.product_id.check_valid_date == False">
+                No Code Applied
+            </td>
+            <td class="text-center td-warranty" t-if="line.product_id.check_valid_date == True">
+                <span t-field="line.product_id.product_warranty"/>
+            </td>
+        </xpath>
+    </template>
+</odoo>
