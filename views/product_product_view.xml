@@ -41,5 +41,16 @@
            </field>
         </record>
 
+        <record id="filter_valid_product_warranty_action" model="ir.actions.act_window">
+            <field name="name">Valid Product Warranty</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="domain">[('check_valid_date', '=', True)]</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="valid_product_warranty" name="Products Have Valid Product Warranty" parent="sale.sale_menu_root"
+                  action="filter_valid_product_warranty_action" sequence="7"/>
+
     </data>
 </odoo>
