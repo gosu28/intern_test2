@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="product_product_form_view_inherit" model="ir.ui.view">
+            <field name="name">product.product.form.view.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='categ_id']" position="after">
+                    <field name="product_warranty" groups="odoo_rm_ro-016_test2.group_advanced_sale"/>
+                    <field name="date_to" groups="odoo_rm_ro-016_test2.group_advanced_sale"/>
+                    <field name="date_from" groups="odoo_rm_ro-016_test2.group_advanced_sale"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="product_variant_tree_view_inherit" model="ir.ui.view">
+            <field name="name">product_variant_tree_view_inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_product_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="product_warranty" groups="odoo_rm_ro-016_test2.group_advanced_sale"/>
+                    <field name="time_interval" groups="odoo_rm_ro-016_test2.group_advanced_sale"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="product_has_warranty_filter" model="ir.ui.view">
+           <field name="name">product.has.warranty.filter</field>
+           <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_search_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='inactive']" position="after">
+                    <separator/>
+                    <filter string="Valid Warranty Date" name="valid_warranty"
+                            domain="[('check_valid_date','=',True)]"/>
+                    <separator/>
+                </xpath>
+           </field>
+        </record>
+
+    </data>
+</odoo>

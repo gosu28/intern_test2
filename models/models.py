@@ -3,7 +3,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 from datetime import datetime, date
-from dateutil.relativedelta import relativedelta
 
 
 class ProductProduct(models.Model):
@@ -13,6 +12,8 @@ class ProductProduct(models.Model):
     product_warranty = fields.Text(string="Product Warranty Code", readonly=True, compute='create_product_warranty')
     date_to = fields.Date(string='Date To')
     date_from = fields.Date(string='Date From')
+    time_interval = fields.Text(string="Time Interval", compute='check_date_stop_warranty')
+    check_valid_date = fields.Boolean(string='Check Valid')
 
     @api.depends('date_to', 'date_from')
     def create_product_warranty(self):
@@ -34,6 +35,30 @@ class ProductProduct(models.Model):
             if rec.date_from and rec.date_to:
                 if rec.date_from < rec.date_to:
                     raise ValidationError('Date Start Warranty is smaller than Date Stop Warranty.')
+
+    @api.depends('date_from')
+    def check_date_stop_warranty(self):
+        current_date = date.today()
+        for rec in self:
+            count_days = ''
+            if rec.date_from:
+                if current_date < rec.date_from:
+                    delta = rec.date_from - current_date
+                    if delta.days >= 365:
+                        if (delta.days // 365) == 1:
+                            count_days = str(delta.days // 365) + ' year'
+                        else:
+                            count_days = str(delta.days // 365) + ' years'
+                    elif delta.days >= 30:
+                        if (delta.days // 30) == 1:
+                            count_days = str(delta.days // 30) + ' month'
+                        else:
+                            count_days = str(delta.days // 30) + ' months'
+                    elif delta.days == 1:
+                        count_days = str(delta.days) + ' day'
+                    else:
+                        count_days = str(delta.days) + ' days'
+            rec.time_interval = count_days
 
 
 class SaleOder(models.Model):
