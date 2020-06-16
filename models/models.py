@@ -38,26 +38,22 @@ class ProductProduct(models.Model):
 
     @api.depends('date_from')
     def check_date_stop_warranty(self):
-        current_date = date.today()
+        current_date = datetime.today().date()
         for rec in self:
+            date_from = rec.date_from
             count_days = ''
             if rec.date_from:
                 if current_date < rec.date_from:
-                    delta = rec.date_from - current_date
-                    if delta.days >= 365:
-                        if (delta.days // 365) == 1:
-                            count_days = str(delta.days // 365) + ' year'
-                        else:
-                            count_days = str(delta.days // 365) + ' years'
-                    elif delta.days >= 30:
-                        if (delta.days // 30) == 1:
-                            count_days = str(delta.days // 30) + ' month'
-                        else:
-                            count_days = str(delta.days // 30) + ' months'
-                    elif delta.days == 1:
-                        count_days = str(delta.days) + ' day'
+                    date_from = datetime.strptime(str(date_from), "%Y-%m-%d").date()
+                    rd = relativedelta(date_from, current_date)
+                    if rd.years == 0 and rd.months == 0:
+                        count_days = str(rd.days) + "d"
+                    elif rd.years == 0 and rd.months != 0:
+                        count_days = str(rd.months) + "m" + " " + str(rd.days) + "d"
+                    elif rd.years != 0 and rd.months == 0:
+                        count_days = str(rd.years) + "y" + " " + str(rd.days) + "d"
                     else:
-                        count_days = str(delta.days) + ' days'
+                        count_days = str(rd.years) + "y" + " " + str(rd.months) + "m" + " " + str(rd.days) + "d"
             rec.time_interval = count_days
 
 
